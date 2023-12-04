@@ -33,13 +33,14 @@ class LlamaState: ObservableObject {
         }
         messageLog += "Attempting to complete text...\n"
         await llamaContext.completion_init(text: text)
-        messageLog += "\(text)"
-
+        messageLog += "Prompt: \(text)\n"
+        let messageHeader = messageLog
         while await llamaContext.n_cur <= llamaContext.n_len {
             let result = await llamaContext.completion_loop()
-            messageLog += "\(result)"
+            messageLog = messageHeader + result
         }
         await llamaContext.clear()
+        print("done")
         messageLog += "\n\ndone\n"
     }
 }
