@@ -1,1 +1,1 @@
-./common/grammar-parser.h
+../common/grammar-parser.h
