@@ -25,7 +25,9 @@ let package = Package(
                 "ggml-backend.c",
                 "ggml-quants.c",
                 "ggml-metal.m",
-                "common/common.cpp"
+                "common/common.cpp",
+                "common/sampling.cpp",
+                "common/grammar-parser.cpp",
             ],
             resources: [
                 .process("ggml-metal.metal")
