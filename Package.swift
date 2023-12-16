@@ -25,7 +25,7 @@ let package = Package(
                 "ggml-backend.c",
                 "ggml-quants.c",
                 "ggml-metal.m",
-                "common/build-info.cpp",
+                "common/build-info.cpp.in",
                 "common/common.cpp",
                 "common/sampling.cpp",
                 "common/grammar-parser.cpp",
