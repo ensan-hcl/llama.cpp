@@ -25,7 +25,6 @@ let package = Package(
                 "ggml-backend.c",
                 "ggml-quants.c",
                 "ggml-metal.m",
-                "common/sampling.cpp",
                 "common/grammar-parser.cpp",
             ],
             resources: [
