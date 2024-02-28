@@ -8402,6 +8402,12 @@ static llama_token llama_byte_to_token(const llama_vocab & vocab, uint8_t ch) {
     static const char * hex = "0123456789ABCDEF";
     switch (llama_vocab_get_type(vocab)) {
         case LLAMA_VOCAB_TYPE_SPM: {
+            if (ch == '\n') {
+                return vocab.linefeed_id;
+            }
+            if ('A' <= ch && ch <= 'Z') {
+                ch = ch - 'A' + 'a';
+            }
             const char buf[7] = { '<', '0', 'x', hex[ch >> 4], hex[ch & 15], '>', 0 };
             auto token = vocab.token_to_id.find(buf);
             if (token != vocab.token_to_id.end()) {

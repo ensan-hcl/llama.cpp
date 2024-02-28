@@ -1244,6 +1244,9 @@ class QwenModel(Model):
 
 
 class GPT2Model(Model):
+    def set_vocab(self):
+        self._set_vocab_sentencepiece()
+
     def set_gguf_parameters(self):
         self.gguf_writer.add_name(self.dir_model.name)
         self.gguf_writer.add_block_count(self.hparams["n_layer"])
