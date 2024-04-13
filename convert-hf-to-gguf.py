@@ -2033,7 +2033,8 @@ def main() -> None:
     hparams = Model.load_hparams(dir_model)
 
     with torch.inference_mode():
-        model_class = Model.from_model_architecture(hparams["architectures"][0])
+        print(hparams)
+        model_class = MambaModel
         model_instance = model_class(dir_model, ftype_map[args.outtype], fname_out, args.bigendian)
 
         print("Set model parameters")
