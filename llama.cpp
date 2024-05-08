@@ -4306,6 +4306,10 @@ static void llm_load_vocab(
             vocab.add_space_prefix = false;
         } else {
             if (tokenizer_model == "gpt2") {
+                vocab.special_unk_id  = 0;
+                vocab.special_pad_id  = 1;
+                vocab.special_bos_id  = 2;
+                vocab.special_eos_id  = 3;
                 vocab.type = LLAMA_VOCAB_TYPE_BPE;
             } else {
                 LLAMA_LOG_WARN("%s: unknown tokenizer: '%s'", __func__, tokenizer_model.c_str());
@@ -4339,14 +4343,25 @@ static void llm_load_vocab(
             }
 
             // default special tokens
-            vocab.special_bos_id  = 11;
-            vocab.special_eos_id  = 11;
-            vocab.special_unk_id  = -1;
+            // vocab.special_bos_id  = 11;
+            // vocab.special_eos_id  = 11;
+            // vocab.special_unk_id  = -1;
             vocab.special_sep_id  = -1;
-            vocab.special_pad_id  = -1;
+            // vocab.special_pad_id  = -1;
             vocab.special_cls_id  = -1;
             vocab.special_mask_id = -1;
         }
+
+        // Report BOS / EOS / UNK / SEP / PAD / CLS / MASK special tokens
+        LLAMA_LOG_WARN("%s: special tokens: BOS=%d, EOS=%d, UNK=%d, SEP=%d, PAD=%d, CLS=%d, MASK=%d",
+            __func__,
+            vocab.special_bos_id,
+            vocab.special_eos_id,
+            vocab.special_unk_id,
+            vocab.special_sep_id,
+            vocab.special_pad_id,
+            vocab.special_cls_id,
+            vocab.special_mask_id);
 
         // for now, only BPE models have pre-tokenizers
         if (vocab.type == LLAMA_VOCAB_TYPE_BPE) {
@@ -4400,6 +4415,9 @@ static void llm_load_vocab(
             } else if (
                 tokenizer_pre == "dbrx") {
                 vocab.type_pre = LLAMA_VOCAB_PRE_TYPE_DBRX;
+            } else if (
+                tokenizer_pre == "gpt2-small-japanese-char") {
+                vocab.type_pre = LLAMA_VOCAB_PRE_TYPE_GPT2_SMALL_JAPANESE_CHAR;
             } else {
                 throw std::runtime_error(format("unknown pre-tokenizer type: '%s'", tokenizer_pre.c_str()));
             }
@@ -4474,21 +4492,21 @@ static void llm_load_vocab(
             { LLM_KV_TOKENIZER_EOT_ID,    vocab.special_eot_id    },
         };
 
-        for (const auto & it : special_token_types) {
-            const std::string & key = kv(std::get<0>(it));
-            int32_t & id = std::get<1>(it);
+        // for (const auto & it : special_token_types) {
+        //     const std::string & key = kv(std::get<0>(it));
+        //     int32_t & id = std::get<1>(it);
 
-            uint32_t new_id;
-            if (!ml.get_key(std::get<0>(it), new_id, false)) {
-                continue;
-            }
-            if (new_id >= vocab.id_to_token.size()) {
-                LLAMA_LOG_WARN("%s: bad special token: '%s' = %ud, using default id %d\n",
-                    __func__, key.c_str(), new_id, id);
-            } else {
-                id = new_id;
-            }
-        }
+        //     uint32_t new_id;
+        //     if (!ml.get_key(std::get<0>(it), new_id, false)) {
+        //         continue;
+        //     }
+        //     if (new_id >= vocab.id_to_token.size()) {
+        //         LLAMA_LOG_WARN("%s: bad special token: '%s' = %ud, using default id %d\n",
+        //             __func__, key.c_str(), new_id, id);
+        //     } else {
+        //         id = new_id;
+        //     }
+        // }
 
         // Handle add_bos_token and add_eos_token
         {
@@ -12261,6 +12279,7 @@ struct llm_tokenizer_bpe {
                         });
                         break;
                     case LLAMA_VOCAB_PRE_TYPE_GPT2:
+                    case LLAMA_VOCAB_PRE_TYPE_GPT2_SMALL_JAPANESE_CHAR:
                     case LLAMA_VOCAB_PRE_TYPE_OLMO:
                         word_collection = unicode_regex_split(text, {
                             "'s|'t|'re|'ve|'m|'ll|'d| ?\\p{L}+| ?\\p{N}+| ?[^\\s\\p{L}\\p{N}]+|\\s+(?!\\S)",

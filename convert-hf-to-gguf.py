@@ -245,6 +245,7 @@ class Model(ABC):
 
         reverse_vocab = {id_: encoded_tok for encoded_tok, id_ in tokenizer.vocab.items()}
         added_vocab = tokenizer.get_added_vocab()
+        print(added_vocab)
 
         for i in range(vocab_size):
             if i not in reverse_vocab:
@@ -323,6 +324,8 @@ class Model(ABC):
         if chkhsh == "a8594e3edff7c29c003940395316294b2c623e09894deebbc65f33f1515df79e":
             # ref: https://huggingface.co/databricks/dbrx-instruct
             res = "dbrx"
+        if chkhsh == "acded0362f57dcca1fbdada8d4c87dd782c798cb4c510a70f12a9de6aea57857":
+            res = "gpt2-small-japanese-char"
 
         if res is None:
             logger.warning("\n")
