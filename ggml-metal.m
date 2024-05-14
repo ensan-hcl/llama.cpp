@@ -376,7 +376,10 @@ static struct ggml_metal_context * ggml_metal_init(int n_cb) {
                 prep[@"GGML_QKK_64"] = @(1);
 #endif
 
+                // Add header file path as a preprocessor macro
+                NSString *headerPath = [path_source stringByDeletingLastPathComponent];
                 MTLCompileOptions* options = [MTLCompileOptions new];
+                prep[@"GGML_COMMON_HEADER"] = [NSString stringWithFormat:@"\"%@/ggml-common.h\"", headerPath];
                 options.preprocessorMacros = prep;
 
                 //[options setFastMathEnabled:false];
