@@ -1,6 +1,6 @@
 #define GGML_COMMON_DECL_METAL
 #define GGML_COMMON_IMPL_METAL
-#include "./ggml-common.h"
+#include GGML_COMMON_HEADER
 
 #include <metal_stdlib>
 
