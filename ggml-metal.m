@@ -379,7 +379,7 @@ static struct ggml_metal_context * ggml_metal_init(int n_cb) {
                 MTLCompileOptions* options = [MTLCompileOptions new];
                 // Add header file path as a preprocessor macro
                 NSString *headerPath = [path_source.stringByDeletingLastPathComponent stringByAppendingPathComponent:@"ggml-common.h"];
-                prep[@"GGML_COMMON_HEADER"] = [NSString stringWithFormat:@"\"%@\"", headerPath];
+                prep[@"GGML_COMMON_HEADER"] = [NSString stringWithFormat:@"\"\"%@\"\"", headerPath];
                 options.preprocessorMacros = prep;
 
                 //[options setFastMathEnabled:false];
