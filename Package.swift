@@ -16,8 +16,8 @@ var sources = [
 var resources: [Resource] = []
 var linkerSettings: [LinkerSetting] = []
 var cSettings: [CSetting] =  [
-    .unsafeFlags(["-Wno-shorten-64-to-32", "-O3", "-DNDEBUG"]),
-    .unsafeFlags(["-fno-objc-arc"]),
+    // .unsafeFlags(["-Wno-shorten-64-to-32", "-O3", "-DNDEBUG"]),
+    // .unsafeFlags(["-fno-objc-arc"]),
     // NOTE: NEW_LAPACK will required iOS version 16.4+
     // We should consider add this in the future when we drop support for iOS 14
     // (ref: ref: https://developer.apple.com/documentation/accelerate/1513264-cblas_sgemm?language=objc)
