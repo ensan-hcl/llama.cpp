@@ -17,7 +17,7 @@ var resources: [Resource] = []
 var linkerSettings: [LinkerSetting] = []
 var cSettings: [CSetting] =  [
     // .unsafeFlags(["-Wno-shorten-64-to-32", "-O3", "-DNDEBUG"]),
-    // .unsafeFlags(["-fno-objc-arc"]),
+    // Workaround of https://github.com/llvm/llvm-project/issues/40056
     // NOTE: NEW_LAPACK will required iOS version 16.4+
     // We should consider add this in the future when we drop support for iOS 14
     // (ref: ref: https://developer.apple.com/documentation/accelerate/1513264-cblas_sgemm?language=objc)
@@ -39,6 +39,11 @@ cSettings.append(
 
 #if os(Linux)
     cSettings.append(.define("_GNU_SOURCE"))
+#endif
+
+#if os(Windows)
+    cSettings.append(.unsafeFlags(["-Xclang", "-fno-split-cold-code"]))
+    cSettings.append(.unsafeFlags(["-Wdeprecated-declarations"]))
 #endif
 
 let package = Package(
@@ -74,5 +79,5 @@ let package = Package(
             linkerSettings: linkerSettings
         )
     ],
-    cxxLanguageStandard: .cxx17
+    cxxLanguageStandard: .cxx14
 )
