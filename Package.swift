@@ -41,6 +41,12 @@ cSettings.append(
     cSettings.append(.define("_GNU_SOURCE"))
 #endif
 
+#if os(Windows)
+    // Workaround of https://github.com/llvm/llvm-project/issues/40056
+    cSettings.append(.unsafeFlags(["-Xclang", "-fno-split-cold-code"]))
+    cSettings.append(.unsafeFlags(["-Wdeprecated-declarations"]))
+#endif
+
 let package = Package(
     name: "llama",
     platforms: [
@@ -74,5 +80,5 @@ let package = Package(
             linkerSettings: linkerSettings
         )
     ],
-    cxxLanguageStandard: .cxx11
+    cxxLanguageStandard: .cxx14
 )
